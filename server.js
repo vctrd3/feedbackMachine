@@ -1,13 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
+require('./models/User'); //needs to be before passport initialization
+require('./models/Survey');
+require('./services/passport'); //initialize passport
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const authRoutes = require('./routes/authRoutes');
 const billingRoutes = require('./routes/billingRoutes')
+const surveyRoutes = require('./routes/surveyRoutes')
 const keys = require('./config/keys');
-require('./models/User') //needs to be before passport initialization
-require('./services/passport'); //initialize passport
+
 
 mongoose.connect(keys.mongoURI, {useNewUrlParser: true, useUnifiedTopology: true});
 
@@ -27,6 +30,7 @@ app.use(passport.session());
 
 app.use('/', authRoutes);
 app.use('/', billingRoutes);
+app.use('/', surveyRoutes);
 
 if(process.env.NODE_ENV === 'production'){
   //Express will serve production asset
